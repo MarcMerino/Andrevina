@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Andrevina</string>
+    <string name="adivina_el_numero">Adivina el numero</string>
+    <string name="comprovar">Comprovar</string>
+    <string name="numero_entre_0_i_100">Numero entre 0 i 100</string>
+    <string name="tries">Tries:</string>
+    <string name="attemtps">Attemtps:</string>
+    <string name="check">check</string>
+    <string name="attempts">Attempts:</string>
+</resources>
