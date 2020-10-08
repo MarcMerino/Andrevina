@@ -2,7 +2,9 @@ package com.boonkram.andrevina;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         final TextView t = findViewById(R.id.editTextNumber);
         final TextView attempts = findViewById(R.id.attempts);
         final Button b = findViewById(R.id.button);
+        final Button r = findViewById(R.id.rankingActivityOpener);
 
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,11 +56,17 @@ public class MainActivity extends AppCompatActivity {
                     } else if (n > x) {
                         Toast.makeText(MainActivity.this, "The number you're looking for is higher", Toast.LENGTH_SHORT).show();
                     } else if (n < x) {
-                        Toast.makeText(MainActivity.this, "The number you're looking for is lower" + n, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "The number you're looking for is lower", Toast.LENGTH_SHORT).show();
+
                     }
                 }
+            }
+        });
 
-
+        r.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setContentView(R.layout.activity_ranking);
             }
         });
     }
