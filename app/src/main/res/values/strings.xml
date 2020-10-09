@@ -8,4 +8,5 @@
     <string name="check">check</string>
     <string name="attempts">Attempts:</string>
     <string name="ranking">Ranking</string>
+    <string name="back">Back</string>
 </resources>

@@ -3,19 +3,24 @@ package com.boonkram.andrevina;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
 
-    int n = (int) (Math.random() * 100 + 1);
-    int c = 0;
+public class MainActivity extends AppCompatActivity {
+    public static ArrayList<Record> playerRank;
+    private int n = (int) (Math.random() * 100 + 1);
+    private int c = 0;
 
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -63,11 +68,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         r.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setContentView(R.layout.activity_ranking);
+                Intent intent = new Intent(MainActivity.this, RankingActivity.class);
+                playerRank.add(new Record("Manolo", Integer.parseInt(attempts.getText().toString()), "00:00"));
+                intent.putExtra("rankData", playerRank);
+                startActivity(intent);
             }
         });
     }
+
 }

@@ -12,32 +12,45 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:text="@string/ranking"
-        app:layout_constraintBottom_toTopOf="@+id/_dynamic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ListView
-        android:id="@+id/listViewRanking"
-        android:layout_width="wrap_content"
-        android:layout_height="400dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rankingTitle"
-        app:layout_constraintVertical_bias="0.261" />
-
     <Button
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back"
+        android:text="@string/back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TableLayout
+        android:id="@+id/rankingTable"
+        android:layout_width="345dp"
+        android:layout_height="397dp"
+        app:layout_constraintBottom_toTopOf="@+id/backButton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listViewRanking" />
+        app:layout_constraintTop_toBottomOf="@+id/rankingTitle">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </TableLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
