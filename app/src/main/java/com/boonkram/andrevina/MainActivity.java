@@ -15,8 +15,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    public static ArrayList<Record> playerRank;
+    public static ArrayList<Record> playerRank = new ArrayList<Record>();
     private int n = (int) (Math.random() * 100 + 1);
+    private boolean win = false;
     private int c = 0;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                     if (n == x) {
                         b.setText("Reset");
                         Toast.makeText(MainActivity.this, "Congratulations, you've found the number!", Toast.LENGTH_LONG).show();
+                        win = true;
                     } else if (n > x) {
                         Toast.makeText(MainActivity.this, "The number you're looking for is higher", Toast.LENGTH_SHORT).show();
                     } else if (n < x) {
@@ -73,8 +75,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, RankingActivity.class);
-                playerRank.add(new Record("Manolo", Integer.parseInt(attempts.getText().toString()), "00:00"));
-                intent.putExtra("rankData", playerRank);
+                if (win) {
+                    playerRank.add(new Record("Manolo", c, "00:00"));
+                    win = false;
+                }
                 startActivity(intent);
             }
         });
