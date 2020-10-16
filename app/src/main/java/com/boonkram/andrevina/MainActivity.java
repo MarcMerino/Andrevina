@@ -3,6 +3,8 @@ package com.boonkram.andrevina;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Record> playerRank = new ArrayList<Record>();
     private int n = (int) (Math.random() * 100 + 1);
     private boolean win = false;
+    private String name;
     private int c = 0;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,16 +75,55 @@ public class MainActivity extends AppCompatActivity {
 
 
         r.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RankingActivity.class);
                 if (win) {
-                    playerRank.add(new Record("Manolo", c, "00:00"));
-                    win = false;
+                    getNameByDialog();
                 }
+
+            }
+        });
+    }
+
+    public void getNameByDialog() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Register");
+        alert.setMessage("Add new registry:");
+
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                boolean match = false;
+                name = input.getText().toString();
+                Intent intent = new Intent(MainActivity.this, RankingActivity.class);
+                if (!playerRank.isEmpty()) {
+                    for (Record r : playerRank) {
+                        if (r.getName().equalsIgnoreCase(name)) {
+                            r.setAttempts(c);
+                            r.setTime("00:00");
+                            match = true;
+                            break;
+                        }
+                    }
+                }
+                if (!match) {
+                    playerRank.add(new Record(name, c, "00:00"));
+                }
+                win = false;
                 startActivity(intent);
             }
         });
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Close
+            }
+        });
+        alert.show();
     }
 
 }
