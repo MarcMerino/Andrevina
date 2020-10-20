@@ -8,11 +8,11 @@
 
     <EditText
         android:id="@+id/editTextNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="256dp"
+        android:layout_height="43dp"
         android:layout_marginTop="48dp"
         android:ems="10"
-        android:hint="@string/numero_entre_0_i_100"
+        android:hint="@string/number_between_0_and_100"
         android:importantForAutofill="no"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +46,7 @@
         android:id="@+id/attempts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="48dp"
         android:text="@string/attempts"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,4 +61,16 @@
         android:text="@string/ranking"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="231dp"
+        android:layout_height="23dp"
+        android:max="100"
+        android:progress="1"
+        app:layout_constraintBottom_toTopOf="@+id/attempts"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumber"
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

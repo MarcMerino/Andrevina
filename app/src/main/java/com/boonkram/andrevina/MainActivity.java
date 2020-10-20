@@ -2,36 +2,64 @@ package com.boonkram.andrevina;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    public static ArrayList<Record> playerRank = new ArrayList<Record>();
+    public static ArrayList<Record> playerRank = new ArrayList<>();
     private int n = (int) (Math.random() * 100 + 1);
     private boolean win = false;
     private String name;
     private int c = 0;
+
+    private int min = 0;
+    private int max = 100;
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final TextView t = findViewById(R.id.editTextNumber);
-        final TextView attempts = findViewById(R.id.attempts);
+        final EditText t = findViewById(R.id.editTextNumber);
+        final TextView attempts = findViewById(R.id.attempts); attempts.setText(("Attempts: " + c));
+        final SeekBar s = findViewById(R.id.seekBar);
         final Button b = findViewById(R.id.button);
         final Button r = findViewById(R.id.rankingActivityOpener);
+
+        s.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                t.setText(String.valueOf(progress));
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        t.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    s.setProgress(Integer.parseInt(String.valueOf(t.getText())));
+                    b.callOnClick();
+                    t.setText("");
+                }
+                return false;
+            }
+        });
 
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,36 +79,53 @@ public class MainActivity extends AppCompatActivity {
 
                 if (b.getText().equals("Reset")) {
                     n = (int) (Math.random() * 100 + 1);
-                    b.setText("Comprovar");
+                    b.setText(R.string.check);
 
                     c = 0;
-                    attempts.setText("Attempts: " + c);
-
+                    attempts.setText(("Attempts: " + c));
                 } else {
-                    attempts.setText("Attempts: " + c);
+                    attempts.setText(("Attempts: " + c));
 
                     if (n == x) {
-                        b.setText("Reset");
+                        b.setText(R.string.reset);
                         Toast.makeText(MainActivity.this, "Congratulations, you've found the number!", Toast.LENGTH_LONG).show();
                         win = true;
+                        max = 100;
+                        min = 0;
+                        t.setHint("Number between " + min + " and " + max);
+
                     } else if (n > x) {
                         Toast.makeText(MainActivity.this, "The number you're looking for is higher", Toast.LENGTH_SHORT).show();
+                        if (x > min) {
+                            min = x;
+                        }
+                        t.setHint("Number between " + min + " and " + max);
                     } else if (n < x) {
                         Toast.makeText(MainActivity.this, "The number you're looking for is lower", Toast.LENGTH_SHORT).show();
+                        if (x < max) {
+                            max = x;
+                        }
+                        t.setHint("Number between " + min + " and " + max);
 
                     }
+                    t.setText("");
                 }
             }
         });
-
 
         r.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
                 if (win) {
                     getNameByDialog();
+                } else {
+                    if (playerRank.size() == 0) {
+                        Toast.makeText(MainActivity.this, "You need to win to save a score", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(MainActivity.this, RankingActivity.class);
+                        startActivity(intent);
+                    }
                 }
-
             }
         });
     }
@@ -113,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
                 if (!match) {
                     playerRank.add(new Record(name, c, "00:00"));
                 }
-                win = false;
                 startActivity(intent);
             }
         });
