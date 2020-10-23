@@ -3,12 +3,11 @@ package com.boonkram.andrevina;
 public class Record {
     private String name;
     private int attempts;
-    private String time = "00:00";
+    //private String time = "00:00";
 
-    public Record(String name, int attempts, String time) {
+    public Record(String name, int attempts) {
         this.setName(name);
         this.setAttempts(attempts);
-        this.setTime(time);
     }
 
     public String getName() {
@@ -25,13 +24,5 @@ public class Record {
 
     public void setAttempts(int attempts) {
         this.attempts = attempts;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 }

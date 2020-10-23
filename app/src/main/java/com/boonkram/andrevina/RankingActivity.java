@@ -4,18 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class RankingActivity extends AppCompatActivity {
 
@@ -24,31 +18,25 @@ public class RankingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ranking);
 
         final Button b = findViewById(R.id.backButton);
+        final ListView l = findViewById(R.id.rankingList);
 
-        //make sure that the lists contain data or else display will be blank screen
-        TableRow.LayoutParams params1=new TableRow.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT,1.0f);
-        TableRow.LayoutParams params2=new TableRow.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
-        TableLayout table = (TableLayout) findViewById(R.id.rankingTable);
-        for(int i=0; i < MainActivity.playerRank.size(); i++) {
-            TableRow row = new TableRow(this);
-            TextView txt1 = new TextView(this); txt1.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            TextView txt2 = new TextView(this); txt2.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            TextView txt3 = new TextView(this); txt3.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
-            //setting the text
-            txt1.setText(MainActivity.playerRank.get(i).getName());
-            txt2.setText(String.valueOf(MainActivity.playerRank.get(i).getAttempts()));
-            txt3.setText(MainActivity.playerRank.get(i).getTime());
-            txt1.setLayoutParams(params1);
-            txt2.setLayoutParams(params1);
-            txt3.setLayoutParams(params1);
-            //the textviews have to be added to the row created
-            row.addView(txt1);
-            row.addView(txt2);
-            row.addView(txt3);
-            row.setLayoutParams(params2);
-            table.addView(row);
-        }
+        ArrayAdapter<Record> adapter = new ArrayAdapter<Record>(this, R.layout.list_item) {
+            @Override
+            public View getView(int pos, View convertView, ViewGroup container)
+            {
+                // getView ens construeix el layout i hi "pinta" els valors de l'element en la posició pos
+                if( convertView==null ) {
+                    // inicialitzem l'element la View amb el seu layout
+                    convertView = getLayoutInflater().inflate(R.layout.list_item, container, false);
+                }
+                // "Pintem" valors (també quan es refresca)
+                ((TextView) convertView.findViewById(R.id.name)).setText(getItem(pos).getName());
+                ((TextView) convertView.findViewById(R.id.attempts)).setText(String.valueOf(getItem(pos).getAttempts()));
+                return convertView;
+            }
+        };
+        
+        l.setAdapter(adapter);
 
         b.setOnClickListener(new View.OnClickListener() {
             @Override

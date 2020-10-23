@@ -1,13 +1,12 @@
 <resources>
     <string name="app_name">Andrevina</string>
     <string name="adivina_el_numero">Adivina el numero</string>
-    <string name="numero_entre_0_i_100">Numero entre 0 i 100</string>
     <string name="tries">Tries:</string>
-    <string name="attemtps">Attemtps:</string>
     <string name="check">Check</string>
     <string name="attempts">Attempts:</string>
     <string name="ranking">Ranking</string>
     <string name="back">Back</string>
     <string name="number_between_0_and_100">Number between 0 and 100</string>
     <string name="reset">Reset</string>
+    <string name="content">content</string>
 </resources>

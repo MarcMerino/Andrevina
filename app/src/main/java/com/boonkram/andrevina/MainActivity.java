@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static android.widget.SeekBar.*;
+
 public class MainActivity extends AppCompatActivity {
     public static ArrayList<Record> playerRank = new ArrayList<>();
     private int n = (int) (Math.random() * 100 + 1);
@@ -34,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText t = findViewById(R.id.editTextNumber);
         final TextView attempts = findViewById(R.id.attempts); attempts.setText(("Attempts: " + c));
-        final SeekBar s = findViewById(R.id.seekBar);
+        final SeekBar seekBar = findViewById(R.id.seekBarNumber);
         final Button b = findViewById(R.id.button);
         final Button r = findViewById(R.id.rankingActivityOpener);
 
-        s.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 t.setText(String.valueOf(progress));
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    s.setProgress(Integer.parseInt(String.valueOf(t.getText())));
+                    seekBar.setProgress(Integer.parseInt(String.valueOf(t.getText())));
                     b.callOnClick();
                     t.setText("");
                 }
@@ -149,14 +151,13 @@ public class MainActivity extends AppCompatActivity {
                     for (Record r : playerRank) {
                         if (r.getName().equalsIgnoreCase(name)) {
                             r.setAttempts(c);
-                            r.setTime("00:00");
                             match = true;
                             break;
                         }
                     }
                 }
                 if (!match) {
-                    playerRank.add(new Record(name, c, "00:00"));
+                    playerRank.add(new Record(name, c));
                 }
                 startActivity(intent);
             }
