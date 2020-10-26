@@ -20,7 +20,7 @@ public class RankingActivity extends AppCompatActivity {
         final Button b = findViewById(R.id.backButton);
         final ListView l = findViewById(R.id.rankingList);
 
-        ArrayAdapter<Record> adapter = new ArrayAdapter<Record>(this, R.layout.list_item) {
+        ArrayAdapter<Record> adapter = new ArrayAdapter<Record>(this, R.layout.list_item, MainActivity.playerRank) {
             @Override
             public View getView(int pos, View convertView, ViewGroup container)
             {
@@ -31,7 +31,7 @@ public class RankingActivity extends AppCompatActivity {
                 }
                 // "Pintem" valors (també quan es refresca)
                 ((TextView) convertView.findViewById(R.id.name)).setText(getItem(pos).getName());
-                ((TextView) convertView.findViewById(R.id.attempts)).setText(String.valueOf(getItem(pos).getAttempts()));
+                ((TextView) convertView.findViewById(R.id.attempts)).setText("Attempts: " + String.valueOf(getItem(pos).getAttempts()));
                 return convertView;
             }
         };
