@@ -1,11 +1,16 @@
 package com.boonkram.andrevina;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -15,8 +20,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 import static android.widget.SeekBar.*;
 
@@ -133,6 +142,68 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    String currentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", photoFile);
+                startActivityForResult(takePictureIntent, 1);
+            }
+        }
+    }
+
+    private Uri getLatestPhoto() {
+        File f = new File("/sdcard/Android/data/com.boonkram.Andrevina/files/Pictures");
+        if (f.exists()) {
+            if (f.listFiles() != null) {
+                return FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", f.listFiles()[f.listFiles().length - 1]);
+            } else {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Intent intent = new Intent(MainActivity.this, RankingActivity.class);
+
+            playerRank.add(new Record(name, c, getLatestPhoto()));
+            Log.v("DEBUG", getLatestPhoto().toString());
+
+            startActivity(intent);
+        }
+    }
+
     public void getNameByDialog() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
@@ -147,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 boolean match = false;
                 name = input.getText().toString();
-                Intent intent = new Intent(MainActivity.this, RankingActivity.class);
                 if (!playerRank.isEmpty()) {
                     for (Record r : playerRank) {
                         if (r.getName().equalsIgnoreCase(name)) {
@@ -158,9 +228,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 if (!match) {
-                    playerRank.add(new Record(name, c));
+                    dispatchTakePictureIntent();
                 }
-                startActivity(intent);
+
             }
         });
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

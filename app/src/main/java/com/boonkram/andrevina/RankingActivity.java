@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ public class RankingActivity extends AppCompatActivity {
                 // "Pintem" valors (també quan es refresca)
                 ((TextView) convertView.findViewById(R.id.name)).setText(getItem(pos).getName());
                 ((TextView) convertView.findViewById(R.id.attempts)).setText("Attempts: " + String.valueOf(getItem(pos).getAttempts()));
+                ((ImageView) convertView.findViewById(R.id.imageView)).setImageURI(getItem(pos).getFileUri());
                 return convertView;
             }
         };
@@ -43,7 +45,6 @@ public class RankingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(RankingActivity.this, MainActivity.class);
                 startActivity(i);
-
             }
         });
     }
