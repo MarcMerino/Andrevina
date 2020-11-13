@@ -2,6 +2,7 @@ package com.boonkram.andrevina;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,17 +22,17 @@ public class RankingActivity extends AppCompatActivity {
         final ListView l = findViewById(R.id.rankingList);
 
         ArrayAdapter<Record> adapter = new ArrayAdapter<Record>(this, R.layout.list_item, MainActivity.playerRank) {
+            @SuppressLint("SetTextI18n")
             @Override
             public View getView(int pos, View convertView, ViewGroup container)
             {
                 // getView ens construeix el layout i hi "pinta" els valors de l'element en la posició pos
                 if( convertView==null ) {
-                    // inicialitzem l'element la View amb el seu layout
                     convertView = getLayoutInflater().inflate(R.layout.list_item, container, false);
                 }
                 // "Pintem" valors (també quan es refresca)
                 ((TextView) convertView.findViewById(R.id.name)).setText(getItem(pos).getName());
-                ((TextView) convertView.findViewById(R.id.attempts)).setText("Attempts: " + String.valueOf(getItem(pos).getAttempts()));
+                ((TextView) convertView.findViewById(R.id.attempts)).setText("Attempts: " + getItem(pos).getAttempts());
                 return convertView;
             }
         };
