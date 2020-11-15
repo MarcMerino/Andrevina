@@ -113,13 +113,13 @@ public class MainActivity extends AppCompatActivity {
                         t.setHint("Number between " + min + " and " + max);
 
                     } else if (n > x) {
-                        Toast.makeText(MainActivity.this, "The number you're looking for is higher +" +n, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "The number you're looking for is higher", Toast.LENGTH_SHORT).show();
                         if (x > min) {
                             min = x;
                         }
                         t.setHint("Number between " + min + " and " + max);
                     } else if (n < x) {
-                        Toast.makeText(MainActivity.this, "The number you're looking for is lower +" +n, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "The number you're looking for is lower", Toast.LENGTH_SHORT).show();
                         if (x < max) {
                             max = x;
                         }
