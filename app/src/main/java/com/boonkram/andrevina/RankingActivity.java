@@ -32,7 +32,7 @@ public class RankingActivity extends AppCompatActivity {
                 }
                 // "Pintem" valors (també quan es refresca)
                 ((TextView) convertView.findViewById(R.id.name)).setText(getItem(pos).getName());
-                ((TextView) convertView.findViewById(R.id.attempts)).setText("Attempts: " + String.valueOf(getItem(pos).getAttempts()));
+                ((TextView) convertView.findViewById(R.id.attempts)).setText(("Attempts: " + getItem(pos).getAttempts()));
                 ((ImageView) convertView.findViewById(R.id.imageView)).setImageURI(getItem(pos).getFileUri());
                 return convertView;
             }

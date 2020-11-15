@@ -3,6 +3,7 @@ package com.boonkram.andrevina;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,7 +25,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 
 import static android.widget.SeekBar.*;
@@ -65,7 +65,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    seekBar.setProgress(Integer.parseInt(String.valueOf(t.getText())));
+                    try {
+                        if (!String.valueOf(t.getText()).isEmpty())
+                            seekBar.setProgress(Integer.parseInt(String.valueOf(t.getText())));
+                    } catch (Exception e) {
+                        seekBar.setProgress(1);
+                    }
+
                     b.callOnClick();
                     t.setText("");
                 }
@@ -78,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int x = 0;
                 try {
-                    if (t.getText() != null) {
+                    if (!String.valueOf(t.getText()).isEmpty()) {
                         x = Integer.parseInt(String.valueOf(t.getText()));
                         c++;
                     }
@@ -107,13 +113,13 @@ public class MainActivity extends AppCompatActivity {
                         t.setHint("Number between " + min + " and " + max);
 
                     } else if (n > x) {
-                        Toast.makeText(MainActivity.this, "The number you're looking for is higher", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "The number you're looking for is higher +" +n, Toast.LENGTH_SHORT).show();
                         if (x > min) {
                             min = x;
                         }
                         t.setHint("Number between " + min + " and " + max);
                     } else if (n < x) {
-                        Toast.makeText(MainActivity.this, "The number you're looking for is lower", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "The number you're looking for is lower +" +n, Toast.LENGTH_SHORT).show();
                         if (x < max) {
                             max = x;
                         }
@@ -146,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -160,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         return image;
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -174,13 +181,14 @@ public class MainActivity extends AppCompatActivity {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, 1);
             }
         }
     }
 
     private Uri getLatestPhoto() {
-        File f = new File("/sdcard/Android/data/com.boonkram.Andrevina/files/Pictures");
+        File f = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         if (f.exists()) {
             if (f.listFiles() != null) {
                 return FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", f.listFiles()[f.listFiles().length - 1]);
@@ -198,7 +206,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, RankingActivity.class);
 
             playerRank.add(new Record(name, c, getLatestPhoto()));
-            Log.v("DEBUG", getLatestPhoto().toString());
 
             startActivity(intent);
         }
@@ -218,6 +225,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 boolean match = false;
                 name = input.getText().toString();
+                Log.v("DEBUG", "Name is: " + name);
+                if (name.isEmpty()) {
+                    name = "player";
+                }
+                Log.v("DEBUG", "New name is: " + name);
                 if (!playerRank.isEmpty()) {
                     for (Record r : playerRank) {
                         if (r.getName().equalsIgnoreCase(name)) {
